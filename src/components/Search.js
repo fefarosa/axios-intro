@@ -7,6 +7,8 @@ class Search extends React.Component {
   state = {
     searchTerm: "",
     results: [],
+    error: false,
+    fullTextSearch: false,
   };
 
   //Terceiro passo: Atualizar o state com o que o usuario digitar no input
@@ -19,14 +21,16 @@ class Search extends React.Component {
     //Quarto passo: incluir o que foi digitado no input na URL de pesquisa na API
     try {
       const response = await axios.get(
-        `https://restcountries.eu/rest/v2/name/${this.state.searchTerm}`
+        `https://restcountries.eu/rest/v2/name/${this.state.searchTerm}?fullText=${this.state.fullTextSearch}`
       );
-
 
       //Quinto passo: atualizar o state com o resultado da pesquisa
       this.setState({ results: [...response.data] });
     } catch (err) {
       console.log(err);
+      if (err.response.status === 404) {
+          this.setState({ error: true });
+      }
     }
   };
 
@@ -39,14 +43,29 @@ class Search extends React.Component {
             onChange={this.handleChange}
             value={this.state.searchTerm}
           />
+
           <div className="input-group-append">
             <button className="btn btn-primary" onClick={this.handleClick}>
               Search
             </button>
           </div>
         </div>
+        <div className="form-group form-check">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="fullText"
+            checked={this.state.fullTextSearch}
+            onChange={() => {
+              this.setState({ fullTextSearch: !this.state.fullTextSearch });
+            }}
+          />
+          <label className="form-check-label" hmtlFor="fullText">
+            Search by exact name
+          </label>
+        </div>
         {/* Sexto passo: passar o state como prop para o componente que vai exibir os resultados*/}
-        <SearchResults results={this.state.results} />
+        <SearchResults results={this.state.results} error={this.state.error}/>
       </div>
     );
   }

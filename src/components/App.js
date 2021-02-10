@@ -1,11 +1,11 @@
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import Search from "./Search"
+import Search from "./Search";
 
 function App() {
   return (
     <div className="container mt-5 d-flex justify-content-center">
-     <Search />
+      <Search />
     </div>
   );
 }

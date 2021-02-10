@@ -3,6 +3,7 @@ import React from "react";
 const SearchResults = (props) => {
   return (
     <div className="list-group">
+    {props.error ? <p>No results ):</p> : null}
       {props.results.map((result) => {
         return (
           <div key={result.alpha3Code} className="list-group-item">
